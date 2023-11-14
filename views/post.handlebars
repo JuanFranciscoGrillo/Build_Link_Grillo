@@ -1,0 +1,12 @@
+{{#extend "layouts/main"}}
+    {{#content "body"}}
+        <h1>Create a Job Listing</h1>
+        <form action="/posts/new" method="post">
+            <input type="text" name="title" placeholder="Job Title" required>
+            <textarea name="description" placeholder="Job Description" required></textarea>
+            <input type="text" name="location" placeholder="Location" required>
+            <!-- Additional fields as needed -->
+            <button type="submit">Post Job</button>
+        </form>
+    {{/content}}
+{{/extend}}

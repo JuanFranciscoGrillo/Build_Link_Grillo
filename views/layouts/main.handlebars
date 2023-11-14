@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build_Link</title>
+    <link rel="stylesheet" href="/css/stylesheet.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="navbar-brand">Build_Link</div>
+            <div class="navbar-menu">
+                <a href="/" class="navbar-item">Home</a>
+                <a href="/about" class="navbar-item">About</a>
+                <a href="/contact" class="navbar-item">Contact</a>
+                <a href="/jobs" class="navbar-item">Job Listings</a>
+                <a href="/profile" class="navbar-item">Profile</a>
+                <a href="/search" class="navbar-item">Search</a>
+                <!-- Conditional display based on user's login status -->
+                {{#if loggedIn}}
+                    <a href="/logout" class="navbar-item">Logout</a>
+                {{else}}
+                    <a href="/login" class="navbar-item">Login/Register</a>
+                {{/if}}
+            </div>
+        </nav>
+    </header>
+
+    {{{body}}}
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>© 2023 Build_Link by Juan Grillo. All Rights Reserved.</p>
+            <!-- Additional footer content -->
+        </div>
+    </footer>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>
