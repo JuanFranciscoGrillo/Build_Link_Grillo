@@ -4,11 +4,10 @@ const router = express.Router();
 
 // Create a new comment - POST /api/comments
 router.post('/', async (req, res) => {
-  // Validation or authentication logic can be added here
   try {
     const newComment = await Comment.create({
       text: req.body.text,
-      userId: req.body.userId,  // Ensure this is obtained securely, e.g., from session
+      userId: req.body.userId,  // Assumed to be provided, e.g., from session
       postId: req.body.postId
     });
     res.status(201).json(newComment);
@@ -17,7 +16,17 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Get all comments for a post - GET /api/comments/post/:postId
+// Get all comments - GET /api/comments
+router.get('/', async (req, res) => {
+  try {
+    const comments = await Comment.findAll();
+    res.status(200).json(comments);
+  } catch (err) {
+    res.status(500).json({ message: 'Error retrieving comments', error: err });
+  }
+});
+
+// Get comments by postId - GET /api/comments/post/:postId
 router.get('/post/:postId', async (req, res) => {
   try {
     const comments = await Comment.findAll({
@@ -25,7 +34,7 @@ router.get('/post/:postId', async (req, res) => {
     });
     res.status(200).json(comments);
   } catch (err) {
-    res.status(500).json({ message: 'Error retrieving comments', error: err });
+    res.status(500).json({ message: 'Error retrieving comments for the post', error: err });
   }
 });
 
