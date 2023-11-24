@@ -31,7 +31,7 @@ app.use(session({
 }));
 
 // Turn on routes
-app.use(routes);
+app.use(controllers\api);
 
 // Sync sequelize models to the database, then start the server
 sequelize.sync({ force: false }).then(() => {
