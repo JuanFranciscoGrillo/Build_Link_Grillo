@@ -8,6 +8,7 @@ const sequelize = new Sequelize(
   process.env.DB_PASSWORD || 'YOUR_PASSWORD', 
   {
     host: process.env.DB_HOST || 'YOUR_HOST',
+    logging: false, // Disables logging
     dialect: 'mysql', // or another dialect like 'postgres', 'sqlite', etc.
     // Additional configuration options if needed
   }
