@@ -7,8 +7,8 @@ module.exports = {
 
   // Add the extend helper
   extend: function(name, context) {
-    var blocks = this._blocks || (this._blocks = {}); // Use _blocks to store block content
-    var block = blocks[name] || (blocks[name] = []); // Initialize if not already done
+    const blocks = this._blocks || (this._blocks = {}); // Use _blocks to store block content
+    const block = blocks[name] || (blocks[name] = []); // Initialize if not already done
 
     block.push(context.fn(this)); // Push the block content for later use
   },
