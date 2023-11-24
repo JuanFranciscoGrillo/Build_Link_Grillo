@@ -1,19 +1,19 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable object-curly-spacing */
-/* eslint-disable indent */
-/* eslint-disable linebreak-style */
+// server.js
 const express = require('express');
 const session = require('express-session');
 const exphbs = require('express-handlebars');
-const routes = require('./controllers');
+const routes = require('./controllers'); // Adjust if your routes are defined differently
 const sequelize = require('./config/connection');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
+
+// Importing additional necessary modules
+require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Set up Handlebars.js engine
-const hbs = exphbs.create({ helpers: require('./utils/helpers') });
+// Set up Handlebars.js engine with custom helpers
+const hbs = exphbs.create({ helpers: require('./utils/helpers') }); // Adjust the path if necessary
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
@@ -22,23 +22,25 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-// Set up session with sequelize store
-app.use(
-  session({
-    secret: 'Super secret secret',
-    cookie: {},
-    resave: false,
-    saveUninitialized: true,
-    store: new SequelizeStore({
-      db: sequelize,
-    }),
-  }),
-);
+// Session configuration
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'default_secret', // Use an environment variable for the secret
+  cookie: {},
+  resave: false,
+  saveUninitialized: true,
+  store: new SequelizeStore({
+    db: sequelize
+  })
+}));
 
-// Turn on routes
+// Use routes
 app.use(routes);
 
 // Sync sequelize models to the database, then start the server
 sequelize.sync({ force: false }).then(() => {
-  app.listen(PORT, () => console.log('Now listening'));
+  app.listen(PORT, () => console.log(`Server is running on http://localhost:${PORT}`));
+}).catch(err => {
+  console.error('Unable to connect to the database:', err);
 });
+
+module.exports = app;

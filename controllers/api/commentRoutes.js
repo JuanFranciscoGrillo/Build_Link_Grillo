@@ -1,77 +1,69 @@
-const express = require('express');
-// eslint-disable-next-line new-cap
-const router = express.Router();
-const comment = require('../models/comment'); // Adjust the path as necessary
+const router = require('express').Router();
+const {Comment} = require('../../models');
 
-// Create a new comment - POST /api/comments
+// POST - Create a new comment
 router.post('/', async (req, res) => {
   try {
-    const newComment = await comment.create({
-      text: req.body.text,
-      userId: req.body.userId, // Assumed to be provided, e.g., from session
-      postId: req.body.postId,
-    });
-    res.status(201).json(newComment);
+    const newComment = await Comment.create(req.body);
+    res.status(200).json(newComment);
   } catch (err) {
-    res.status(400).json({message: 'Error creating comment', error: err});
+    res.status(400).json(err);
   }
 });
 
-// Get all comments - GET /api/comments
+// GET - Retrieve all comments
 router.get('/', async (req, res) => {
   try {
-    const comments = await comment.findAll();
+    const comments = await Comment.findAll();
     res.status(200).json(comments);
   } catch (err) {
-    res.status(500).json({message: 'Error retrieving comments', error: err});
+    res.status(500).json(err);
   }
 });
 
-// Get comments by postId - GET /api/comments/post/:postId
-router.get('/post/:postId', async (req, res) => {
+// GET - Retrieve a single comment by ID
+router.get('/:id', async (req, res) => {
   try {
-    const comments = await comment.findAll({
-      where: {postId: req.params.postId},
-    });
-    res.status(200).json(comments);
+    const comment = await Comment.findByPk(req.params.id);
+    if (!comment) {
+      res.status(404).json({message: 'No comment found with this id!'});
+      return;
+    }
+    res.status(200).json(comment);
   } catch (err) {
-    res.status(500).json({
-      message: 'Error retrieving comments for the post',
-      error: err,
-    });
+    res.status(500).json(err);
   }
 });
 
-// Update a comment - PUT /api/comments/:id
+// PUT - Update a comment
 router.put('/:id', async (req, res) => {
   try {
-    const updatedComment = await comment.update(
-        {text: req.body.text},
-        {where: {id: req.params.id}},
-    );
+    const updatedComment = await Comment.update(req.body, {
+      where: {id: req.params.id},
+    });
     if (!updatedComment[0]) {
-      res.status(404).json({message: 'No comment found with this id'});
+      res.status(404).json({message: 'No comment found with this id!'});
       return;
     }
-    res.status(200).json({message: 'Comment updated successfully'});
+    res.status(200).json(updatedComment);
   } catch (err) {
-    res.status(500).json({message: 'Error updating comment', error: err});
+    res.status(500).json(err);
   }
 });
 
-// Delete a comment - DELETE /api/comments/:id
+// DELETE - Delete a comment
 router.delete('/:id', async (req, res) => {
   try {
-    const result = await comment.destroy({
+    const comment = await Comment.destroy({
       where: {id: req.params.id},
     });
-    if (!result) {
-      res.status(404).json({message: 'No comment found with this id'});
+    if (!comment) {
+      res.status(404).json({message: 'No comment found with this id!'});
       return;
     }
-    res.status(200).json({message: 'Comment deleted successfully'});
+    res.status(200).json({message: 'Comment deleted!'});
   } catch (err) {
-    res.status(500).json({message: 'Error deleting comment', error: err});
+    res.status(500).json(err);
   }
 });
 

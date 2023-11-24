@@ -1,27 +1,14 @@
-/* eslint-disable require-jsdoc */
+// models/post.js
 'use strict';
 const {Model} = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class Post extends Model {
     static associate(models) {
-      // Post to User (Many-to-One)
-      Post.belongsTo(models.User, {
-        foreignKey: 'user_id',
-        onDelete: 'CASCADE',
-      });
-
-      // Post to Comments (One-to-Many)
-      Post.hasMany(models.Comment, {
-        foreignKey: 'post_id',
-        onDelete: 'CASCADE',
-      });
-
-      // Post to Applications (One-to-Many)
-      Post.hasMany(models.Application, {
-        foreignKey: 'post_id',
-        onDelete: 'CASCADE',
-      });
+      // Associations
+      Post.belongsTo(models.User, {foreignKey: 'userId'});
+      Post.hasMany(models.Application, {foreignKey: 'postId', as: 'applications'});
+      Post.hasMany(models.Comment, {foreignKey: 'postId', as: 'comments'});
     }
   }
 
@@ -29,9 +16,10 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     description: DataTypes.TEXT,
     location: DataTypes.STRING,
-    salary: DataTypes.INTEGER,
-    company: DataTypes.STRING,
-    user_id: DataTypes.INTEGER, // assuming this is the foreign key to User
+    budget: DataTypes.FLOAT,
+    requiredSkills: DataTypes.STRING, // Could be an array or a comma-separated string
+    deadline: DataTypes.DATE,
+    // Other necessary fields
   }, {
     sequelize,
     modelName: 'Post',

@@ -1,45 +1,29 @@
-'use strict';
-
-const fs = require('fs');
-const path = require('path');
 const Sequelize = require('sequelize');
-const process = require('process');
-const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/connection.js')[env];
-const db = {};
+const {DataTypes} = Sequelize;
 
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  // eslint-disable-next-line max-len
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
-
-fs
-    .readdirSync(__dirname)
-    .filter((file) => {
-      return (
-        file.indexOf('.') !== 0 &&
-      file !== basename &&
-      file.slice(-3) === '.js' &&
-      file.indexOf('.test.js') === -1
-      );
-    })
-    .forEach((file) => {
-      // eslint-disable-next-line max-len
-      const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
-      db[model.name] = model;
-    });
-
-Object.keys(db).forEach((modelName) => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
+const sequelize = new Sequelize({
+  // Configure your database connection here
+  dialect: 'mysql',
+  host: 'localhost',
+  username: 'your_username',
+  password: 'your_password',
+  database: 'your_database_name',
 });
 
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
+// Define your models
+const Application = require('./Application')(sequelize, DataTypes);
+const Comment = require('./Comment')(sequelize, DataTypes);
+const Message = require('./Message')(sequelize, DataTypes);
+const Post = require('./Post')(sequelize, DataTypes);
+const User = require('./User')(sequelize, DataTypes);
 
-module.exports = db;
+// Define associations between models if you have any
+
+module.exports = {
+  sequelize,
+  Application,
+  Comment,
+  Message,
+  Post,
+  User,
+};

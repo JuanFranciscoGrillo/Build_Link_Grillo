@@ -1,77 +1,69 @@
-const express = require('express');
-const {User} = require('../models');
-const router = express.Router();
-const bcrypt = require('bcrypt'); // For password hashing
+const router = require('express').Router();
+const {User} = require('../../models');
 
-// Register a new user - POST /api/users
+// POST - Create a new user
 router.post('/', async (req, res) => {
   try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    const newUser = await User.create({
-      username: req.body.username,
-      email: req.body.email,
-      password: hashedPassword,
-    });
-    res.status(201).json(newUser);
+    const newUser = await User.create(req.body);
+    res.status(200).json(newUser);
   } catch (err) {
-    res.status(400).json({message: 'Error registering user', error: err});
+    res.status(400).json(err);
   }
 });
 
-// User login - POST /api/users/login
-// This is a placeholder. Actual implementation will vary based on your authentication strategy.
-router.post('/login', async (req, res) => {
+// GET - Retrieve all users
+router.get('/', async (req, res) => {
   try {
-    // Authentication logic goes here
-    res.status(200).json({message: 'User logged in successfully'});
+    const users = await User.findAll();
+    res.status(200).json(users);
   } catch (err) {
-    res.status(400).json({message: 'Error logging in', error: err});
+    res.status(500).json(err);
   }
 });
 
-// Get user profile - GET /api/users/:id
+// GET - Retrieve a single user by ID
 router.get('/:id', async (req, res) => {
   try {
-    const userData = await User.findByPk(req.params.id);
-    if (!userData) {
-      res.status(404).json({message: 'User not found'});
+    const user = await User.findByPk(req.params.id);
+    if (!user) {
+      res.status(404).json({message: 'No user found with this id!'});
       return;
     }
-    res.status(200).json(userData);
+    res.status(200).json(user);
   } catch (err) {
-    res.status(500).json({message: 'Error retrieving user data', error: err});
+    res.status(500).json(err);
   }
 });
 
-// Update user profile - PUT /api/users/:id
+// PUT - Update a user
 router.put('/:id', async (req, res) => {
   try {
     const updatedUser = await User.update(req.body, {
       where: {id: req.params.id},
     });
     if (!updatedUser[0]) {
-      res.status(404).json({message: 'No user found with this id'});
+      res.status(404).json({message: 'No user found with this id!'});
       return;
     }
-    res.status(200).json({message: 'User updated successfully'});
+    res.status(200).json(updatedUser);
   } catch (err) {
-    res.status(500).json({message: 'Error updating user', error: err});
+    res.status(500).json(err);
   }
 });
 
-// Delete a user - DELETE /api/users/:id
+// DELETE - Delete a user
 router.delete('/:id', async (req, res) => {
   try {
-    const result = await User.destroy({
+    const user = await User.destroy({
       where: {id: req.params.id},
     });
-    if (!result) {
-      res.status(404).json({message: 'No user found with this id'});
+    if (!user) {
+      res.status(404).json({message: 'No user found with this id!'});
       return;
     }
-    res.status(200).json({message: 'User deleted successfully'});
+    res.status(200).json({message: 'User deleted!'});
   } catch (err) {
-    res.status(500).json({message: 'Error deleting user', error: err});
+    res.status(500).json(err);
   }
 });
 

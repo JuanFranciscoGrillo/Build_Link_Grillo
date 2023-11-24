@@ -1,67 +1,69 @@
-const express = require('express');
-const {Application} = require('../models');
-// eslint-disable-next-line new-cap
-const router = express.Router();
+const router = require('express').Router();
+const {Message} = require('../../models');
 
-// Create a new application - POST /api/applications
+// POST - Create a new message
 router.post('/', async (req, res) => {
   try {
-    const newApplication = await Application.create({
-      userId: req.body.userId,
-      postId: req.body.postId,
-      coverLetter: req.body.coverLetter,
-      resume: req.body.resume,
-      status: 'pending', // default status
-    });
-    res.status(201).json(newApplication);
+    const newMessage = await Message.create(req.body);
+    res.status(200).json(newMessage);
   } catch (err) {
-    res.status(400).json({message: 'Error creating application', error: err});
+    res.status(400).json(err);
   }
 });
 
-// Get all applications for a post - GET /api/applications/post/:postId
-router.get('/post/:postId', async (req, res) => {
+// GET - Retrieve all messages
+router.get('/', async (req, res) => {
   try {
-    const applications = await Application.findAll({
-      where: {postId: req.params.postId},
-    });
-    res.status(200).json(applications);
+    const messages = await Message.findAll();
+    res.status(200).json(messages);
   } catch (err) {
-    // eslint-disable-next-line max-len
-    res.status(500).json({message: 'Error retrieving applications', error: err});
+    res.status(500).json(err);
   }
 });
 
-// Update an application - PUT /api/applications/:id
+// GET - Retrieve a single message by ID
+router.get('/:id', async (req, res) => {
+  try {
+    const message = await Message.findByPk(req.params.id);
+    if (!message) {
+      res.status(404).json({message: 'No message found with this id!'});
+      return;
+    }
+    res.status(200).json(message);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// PUT - Update a message
 router.put('/:id', async (req, res) => {
   try {
-    const updatedApplication = await Application.update(
-        req.body,
-        {where: {id: req.params.id}},
-    );
-    if (!updatedApplication[0]) {
-      res.status(404).json({message: 'No application found with this id'});
+    const updatedMessage = await Message.update(req.body, {
+      where: {id: req.params.id},
+    });
+    if (!updatedMessage[0]) {
+      res.status(404).json({message: 'No message found with this id!'});
       return;
     }
-    res.status(200).json({message: 'Application updated successfully'});
+    res.status(200).json(updatedMessage);
   } catch (err) {
-    res.status(500).json({message: 'Error updating application', error: err});
+    res.status(500).json(err);
   }
 });
 
-// Delete an application - DELETE /api/applications/:id
+// DELETE - Delete a message
 router.delete('/:id', async (req, res) => {
   try {
-    const result = await Application.destroy({
+    const message = await Message.destroy({
       where: {id: req.params.id},
     });
-    if (!result) {
-      res.status(404).json({message: 'No application found with this id'});
+    if (!message) {
+      res.status(404).json({message: 'No message found with this id!'});
       return;
     }
-    res.status(200).json({message: 'Application deleted successfully'});
+    res.status(200).json({message: 'Message deleted!'});
   } catch (err) {
-    res.status(500).json({message: 'Error deleting application', error: err});
+    res.status(500).json(err);
   }
 });
 
