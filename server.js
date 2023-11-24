@@ -1,4 +1,7 @@
-// server.js
+/* eslint-disable linebreak-style */
+/* eslint-disable object-curly-spacing */
+/* eslint-disable indent */
+/* eslint-disable linebreak-style */
 const express = require('express');
 const session = require('express-session');
 const exphbs = require('express-handlebars');
@@ -20,18 +23,20 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 // Set up session with sequelize store
-app.use(session({
-  secret: 'Super secret secret',
-  cookie: {},
-  resave: false,
-  saveUninitialized: true,
-  store: new SequelizeStore({
-    db: sequelize
-  })
-}));
+app.use(
+  session({
+    secret: 'Super secret secret',
+    cookie: {},
+    resave: false,
+    saveUninitialized: true,
+    store: new SequelizeStore({
+      db: sequelize,
+    }),
+  }),
+);
 
 // Turn on routes
-app.use(controllers\api);
+app.use(routes);
 
 // Sync sequelize models to the database, then start the server
 sequelize.sync({ force: false }).then(() => {

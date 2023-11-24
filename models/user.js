@@ -1,6 +1,6 @@
 'use strict';
 const {
-  Model
+  Model,
 } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
@@ -15,32 +15,32 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.Post, {
         foreignKey: 'user_id',
         as: 'posts',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
       });
 
       // One-to-Many with Comment
       User.hasMany(models.Comment, {
         foreignKey: 'user_id',
         as: 'comments',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
       });
 
       // One-to-Many with Application
       User.hasMany(models.Application, {
         foreignKey: 'user_id',
         as: 'applications',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
       });
 
       // Self-Referential Many-to-Many for Messages
       // Assuming you have a Message model where 'sender_id' and 'receiver_id' are the fields
       User.hasMany(models.Message, {
         foreignKey: 'sender_id',
-        as: 'sentMessages'
+        as: 'sentMessages',
       });
       User.hasMany(models.Message, {
         foreignKey: 'receiver_id',
-        as: 'receivedMessages'
+        as: 'receivedMessages',
       });
     }
   }
@@ -50,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     password: DataTypes.STRING,
     profile_picture: DataTypes.STRING,
-    bio: DataTypes.TEXT
+    bio: DataTypes.TEXT,
   }, {
     sequelize,
     modelName: 'User',

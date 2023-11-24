@@ -1,5 +1,5 @@
 'use strict';
-const { Model } = require('sequelize');
+const {Model} = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class Application extends Model {
@@ -12,13 +12,13 @@ module.exports = (sequelize, DataTypes) => {
       // Application to User (Many-to-One)
       Application.belongsTo(models.User, {
         foreignKey: 'userId',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
       });
 
       // Application to Post (Many-to-One)
       Application.belongsTo(models.Post, {
         foreignKey: 'postId',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
       });
     }
   }
@@ -29,29 +29,29 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       references: {
         model: 'Users',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
     postId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'Posts',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
     coverLetter: {
       type: DataTypes.TEXT,
-      allowNull: false
+      allowNull: false,
     },
     resume: {
       type: DataTypes.STRING, // Assuming this is a URL or path to a file
-      allowNull: false
+      allowNull: false,
     },
     status: {
       type: DataTypes.STRING, // e.g., 'pending', 'accepted', 'rejected'
-      allowNull: false
-    }
+      allowNull: false,
+    },
   }, {
     sequelize,
     modelName: 'Application',

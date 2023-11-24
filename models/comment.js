@@ -1,5 +1,5 @@
 'use strict';
-const { Model } = require('sequelize');
+const {Model} = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class Comment extends Model {
@@ -12,13 +12,13 @@ module.exports = (sequelize, DataTypes) => {
       // Comment to User (Many-to-One)
       Comment.belongsTo(models.User, {
         foreignKey: 'userId',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
       });
 
       // Comment to Post (Many-to-One)
       Comment.belongsTo(models.Post, {
         foreignKey: 'postId',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
       });
     }
   }
@@ -26,24 +26,24 @@ module.exports = (sequelize, DataTypes) => {
   Comment.init({
     text: {
       type: DataTypes.TEXT,
-      allowNull: false
+      allowNull: false,
     },
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'Users',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
     postId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'Posts',
-        key: 'id'
-      }
-    }
+        key: 'id',
+      },
+    },
   }, {
     sequelize,
     modelName: 'Comment',

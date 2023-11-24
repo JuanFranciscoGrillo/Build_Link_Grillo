@@ -1,5 +1,5 @@
 const express = require('express');
-const { Post } = require('../models');
+const {Post} = require('../models');
 const router = express.Router();
 
 // Create a new job post - POST /api/posts
@@ -11,11 +11,11 @@ router.post('/', async (req, res) => {
       location: req.body.location,
       salary: req.body.salary,
       company: req.body.company,
-      userId: req.body.userId // Assuming this comes from session or token
+      userId: req.body.userId, // Assuming this comes from session or token
     });
     res.status(201).json(newPost);
   } catch (err) {
-    res.status(400).json({ message: 'Error creating post', error: err });
+    res.status(400).json({message: 'Error creating post', error: err});
   }
 });
 
@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
     const posts = await Post.findAll();
     res.status(200).json(posts);
   } catch (err) {
-    res.status(500).json({ message: 'Error retrieving posts', error: err });
+    res.status(500).json({message: 'Error retrieving posts', error: err});
   }
 });
 
@@ -34,12 +34,12 @@ router.get('/:id', async (req, res) => {
   try {
     const post = await Post.findByPk(req.params.id);
     if (!post) {
-      res.status(404).json({ message: 'No post found with this id' });
+      res.status(404).json({message: 'No post found with this id'});
       return;
     }
     res.status(200).json(post);
   } catch (err) {
-    res.status(500).json({ message: 'Error retrieving post', error: err });
+    res.status(500).json({message: 'Error retrieving post', error: err});
   }
 });
 
@@ -47,16 +47,16 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const updatedPost = await Post.update(
-      req.body, 
-      { where: { id: req.params.id } }
+        req.body,
+        {where: {id: req.params.id}},
     );
     if (!updatedPost[0]) {
-      res.status(404).json({ message: 'No post found with this id' });
+      res.status(404).json({message: 'No post found with this id'});
       return;
     }
-    res.status(200).json({ message: 'Post updated successfully' });
+    res.status(200).json({message: 'Post updated successfully'});
   } catch (err) {
-    res.status(500).json({ message: 'Error updating post', error: err });
+    res.status(500).json({message: 'Error updating post', error: err});
   }
 });
 
@@ -64,15 +64,15 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const result = await Post.destroy({
-      where: { id: req.params.id }
+      where: {id: req.params.id},
     });
     if (!result) {
-      res.status(404).json({ message: 'No post found with this id' });
+      res.status(404).json({message: 'No post found with this id'});
       return;
     }
-    res.status(200).json({ message: 'Post deleted successfully' });
+    res.status(200).json({message: 'Post deleted successfully'});
   } catch (err) {
-    res.status(500).json({ message: 'Error deleting post', error: err });
+    res.status(500).json({message: 'Error deleting post', error: err});
   }
 });
 

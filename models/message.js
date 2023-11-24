@@ -1,5 +1,5 @@
 'use strict';
-const { Model } = require('sequelize');
+const {Model} = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class Message extends Model {
@@ -12,13 +12,13 @@ module.exports = (sequelize, DataTypes) => {
       // Message to User (Many-to-One) for Sender
       Message.belongsTo(models.User, {
         foreignKey: 'senderId',
-        as: 'Sender'
+        as: 'Sender',
       });
 
       // Message to User (Many-to-One) for Receiver
       Message.belongsTo(models.User, {
         foreignKey: 'receiverId',
-        as: 'Receiver'
+        as: 'Receiver',
       });
     }
   }
@@ -29,19 +29,19 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       references: {
         model: 'Users',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
     receiverId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'Users',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
     content: DataTypes.TEXT,
-    timestamp: DataTypes.DATE
+    timestamp: DataTypes.DATE,
   }, {
     sequelize,
     modelName: 'Message',

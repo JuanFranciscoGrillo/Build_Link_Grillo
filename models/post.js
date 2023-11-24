@@ -1,30 +1,26 @@
+/* eslint-disable require-jsdoc */
 'use strict';
-const { Model } = require('sequelize');
+const {Model} = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class Post extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
       // Post to User (Many-to-One)
       Post.belongsTo(models.User, {
         foreignKey: 'user_id',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
       });
 
       // Post to Comments (One-to-Many)
       Post.hasMany(models.Comment, {
         foreignKey: 'post_id',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
       });
 
       // Post to Applications (One-to-Many)
       Post.hasMany(models.Application, {
         foreignKey: 'post_id',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
       });
     }
   }
@@ -35,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
     location: DataTypes.STRING,
     salary: DataTypes.INTEGER,
     company: DataTypes.STRING,
-    user_id: DataTypes.INTEGER // assuming this is the foreign key to User
+    user_id: DataTypes.INTEGER, // assuming this is the foreign key to User
   }, {
     sequelize,
     modelName: 'Post',
