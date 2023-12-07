@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {Comment} = require('../../models');
+const { Comment } = require('../../models');
 
 // POST - Create a new comment
 router.post('/', async (req, res) => {
@@ -26,7 +26,7 @@ router.get('/:id', async (req, res) => {
   try {
     const comment = await Comment.findByPk(req.params.id);
     if (!comment) {
-      res.status(404).json({message: 'No comment found with this id!'});
+      res.status(404).json({ message: 'No comment found with this id!' });
       return;
     }
     res.status(200).json(comment);
@@ -39,10 +39,10 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const updatedComment = await Comment.update(req.body, {
-      where: {id: req.params.id},
+      where: { id: req.params.id },
     });
     if (!updatedComment[0]) {
-      res.status(404).json({message: 'No comment found with this id!'});
+      res.status(404).json({ message: 'No comment found with this id!' });
       return;
     }
     res.status(200).json(updatedComment);
@@ -55,13 +55,13 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const comment = await Comment.destroy({
-      where: {id: req.params.id},
+      where: { id: req.params.id },
     });
     if (!comment) {
-      res.status(404).json({message: 'No comment found with this id!'});
+      res.status(404).json({ message: 'No comment found with this id!' });
       return;
     }
-    res.status(200).json({message: 'Comment deleted!'});
+    res.status(200).json({ message: 'Comment deleted!' });
   } catch (err) {
     res.status(500).json(err);
   }

@@ -2,11 +2,12 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
+    // Add seed data for the Message model here
     await queryInterface.bulkInsert('Messages', [
       {
-        senderId: 1, // Sender User ID
-        receiverId: 2, // Receiver User ID
-        content: 'Sample message from User 1 to User 2.',
+        senderId: 1, // Replace with actual sender user ID
+        receiverId: 2, // Replace with actual receiver user ID
+        content: 'Sample message content',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -15,6 +16,7 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
+    // Add commands to revert seed data for the Message model here
     await queryInterface.bulkDelete('Messages', null, {});
   },
 };

@@ -1,42 +1,29 @@
 'use strict';
-const {Model} = require('sequelize');
 
-module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
-    static associate(models) {
-      // Associations
-      User.hasMany(models.Post, {foreignKey: 'userId', as: 'posts'});
-      User.hasMany(models.Application, {foreignKey: 'userId', as: 'applications'});
-      User.hasMany(models.Message, {foreignKey: 'senderId', as: 'sentMessages'});
-      User.hasMany(models.Message, {foreignKey: 'receiverId', as: 'receivedMessages'});
-      User.hasMany(models.Comment, {foreignKey: 'userId', as: 'comments'});
-    }
-  }
+const bcrypt = require('bcrypt'); // Import bcrypt for password hashing
 
-  User.init(
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    // Hash a sample password
+    const hashedPassword = await bcrypt.hash('your_password_here', 10); // Replace 'your_password_here' with the actual password
+
+    // Add seed data for the User model here
+    await queryInterface.bulkInsert('Users', [
       {
-        name: DataTypes.STRING,
-        email: {
-          type: DataTypes.STRING,
-          allowNull: false,
-          unique: true,
-          validate: {
-            isEmail: true,
-          },
-        },
-        profilePicture: DataTypes.STRING,
-        bio: DataTypes.TEXT,
-        password: {
-          type: DataTypes.STRING,
-          allowNull: false,
-        },
-      // Other necessary fields
+        name: 'John Doe',
+        email: 'johndoe@example.com',
+        profilePicture: 'profile1.jpg',
+        bio: 'Sample bio for John Doe.',
+        password: hashedPassword,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
-      {
-        sequelize,
-        modelName: 'User',
-      },
-  );
+      // Add more user data as needed
+    ]);
+  },
 
-  return User;
+  down: async (queryInterface, Sequelize) => {
+    // Add commands to revert seed data for the User model here
+    await queryInterface.bulkDelete('Users', null, {});
+  },
 };
